@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+<title>Photo & Video Gallery — GulmargOnTheGo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../css/shared.css"/>
+<style>
+.gal-hero{background:linear-gradient(160deg,#0d1f3c,#0b4a42);padding:96px 5vw 72px;text-align:center;position:relative;overflow:hidden}
+.gal-hero::before{content:'';position:absolute;top:-180px;right:-180px;width:550px;height:550px;border-radius:50%;background:radial-gradient(circle,rgba(11,140,126,.15),transparent 70%)}
+.gal-hero h1{font-family:'Syne',sans-serif;font-size:clamp(2.4rem,6vw,4rem);font-weight:800;color:#fff;line-height:1.04;letter-spacing:-.03em;margin-bottom:12px;position:relative;z-index:1}
+.gal-hero h1 em{color:#fbbf24;font-style:italic}
+.gal-hero p{font-size:.93rem;color:rgba(255,255,255,.62);line-height:1.8;max-width:520px;margin:0 auto 28px;position:relative;z-index:1}
+.gal-tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
+.gtab{padding:9px 22px;border-radius:100px;font-size:.77rem;font-weight:600;border:1.5px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);cursor:none;transition:all .22s;background:transparent}
+.gtab.on{background:#f59e0b;border-color:#f59e0b;color:#fff}
+.gtab:hover:not(.on){background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.4);color:#fff}
+/* VIDEO HIGHLIGHTS */
+.vid-sec{padding:72px 5vw;background:#fff}
+.vid-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:20px;margin-top:36px}
+.vid-main,.vid-sub{position:relative;border-radius:18px;overflow:hidden;cursor:none;background:linear-gradient(135deg,#0d1f3c,#0b4a42)}
+.vid-main{aspect-ratio:16/9;box-shadow:0 24px 72px rgba(0,0,0,.16)}
+.vid-subs{display:flex;flex-direction:column;gap:20px}
+.vid-sub{aspect-ratio:16/9;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.vid-main img,.vid-sub img{width:100%;height:100%;object-fit:cover;filter:brightness(.7);transition:filter .3s,transform .4s;display:block}
+.vid-main:hover img,.vid-sub:hover img{filter:brightness(.5);transform:scale(1.04)}
+.play-btn{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.play-circle{border-radius:50%;background:rgba(255,255,255,.93);display:flex;align-items:center;justify-content:center;transition:transform .3s,box-shadow .3s;box-shadow:0 4px 20px rgba(0,0,0,.3)}
+.vid-main .play-circle{width:72px;height:72px;font-size:1.7rem}
+.vid-sub .play-circle{width:48px;height:48px;font-size:1.1rem}
+.vid-main:hover .play-circle,.vid-sub:hover .play-circle{transform:scale(1.12);box-shadow:0 6px 28px rgba(0,0,0,.45)}
+.vid-info{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(13,31,60,.88),transparent);padding:20px 18px 16px}
+.vid-main .vid-info h3{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:800;color:#fff;margin-bottom:3px}
+.vid-main .vid-info p{font-size:.74rem;color:rgba(255,255,255,.6)}
+.vid-sub .vid-info h4{font-family:'Syne',sans-serif;font-size:.88rem;font-weight:700;color:#fff;margin-bottom:2px}
+.vid-sub .vid-info p{font-size:.65rem;color:rgba(255,255,255,.55)}
+/* MASONRY */
+.gal-sec{padding:72px 5vw;background:#f8fafc}
+.gal-grid{columns:3;gap:16px;margin-top:32px}
+.gal-item{break-inside:avoid;margin-bottom:16px;border-radius:14px;overflow:hidden;position:relative;cursor:none;box-shadow:0 4px 16px rgba(0,0,0,.08);transition:transform .3s,box-shadow .3s;display:block}
+.gal-item:hover{transform:scale(1.025);box-shadow:0 16px 48px rgba(0,0,0,.18)}
+.gal-item img{width:100%;display:block;filter:brightness(.88);transition:filter .32s,transform .42s}
+.gal-item:hover img{filter:brightness(.65);transform:scale(1.06)}
+.gal-item.hidden{display:none!important}
+.gil{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(13,31,60,.88),transparent);padding:18px 15px 13px;opacity:0;transition:opacity .28s;pointer-events:none}
+.gal-item:hover .gil{opacity:1}
+.gil strong{display:block;font-size:.78rem;font-weight:700;color:#fff}
+.gil small{font-size:.63rem;color:rgba(255,255,255,.6)}
+/* INSTA STRIP */
+.insta-sec{padding:52px 5vw;background:#fff;text-align:center}
+.insta-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:28px;max-width:1280px;margin-left:auto;margin-right:auto}
+.ii{aspect-ratio:1/1;border-radius:12px;overflow:hidden;position:relative;cursor:none}
+.ii img{width:100%;height:100%;object-fit:cover;transition:transform .4s,filter .3s}
+.ii:hover img{transform:scale(1.1);filter:brightness(.6)}
+.ii-ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(13,31,60,.45);opacity:0;transition:opacity .28s;font-size:1.3rem}
+.ii:hover .ii-ov{opacity:1}
+/* LIGHTBOX */
+.lb{position:fixed;inset:0;z-index:9990;background:rgba(0,0,0,.94);display:none;align-items:center;justify-content:center;padding:24px}
+.lb.open{display:flex}
+.lb-inner{position:relative;max-width:1100px;width:100%}
+.lb-inner img{width:100%;max-height:84vh;object-fit:contain;border-radius:10px;display:block}
+.lb-x{position:absolute;top:-46px;right:0;font-size:1.5rem;color:rgba(255,255,255,.55);cursor:pointer;background:none;border:none;line-height:1;transition:color .2s;padding:4px}
+.lb-x:hover{color:#fff}
+.lb-cap{text-align:center;margin-top:11px;font-size:.8rem;color:rgba(255,255,255,.55);font-family:'Poppins',sans-serif}
+.lb-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;font-size:1.1rem}
+.lb-nav:hover{background:rgba(255,255,255,.25)}
+.lb-prev{left:-56px}.lb-next{right:-56px}
+/* VIDEO MODAL */
+.vm{position:fixed;inset:0;z-index:9991;background:rgba(0,0,0,.96);display:none;align-items:center;justify-content:center;padding:20px}
+.vm.open{display:flex}
+.vm-in{position:relative;width:100%;max-width:980px;aspect-ratio:16/9}
+.vm-in iframe{width:100%;height:100%;border:none;border-radius:12px}
+.vm-x{position:absolute;top:-48px;right:0;font-size:1.5rem;color:rgba(255,255,255,.55);cursor:pointer;background:none;border:none;font-family:inherit;transition:color .2s}
+.vm-x:hover{color:#fff}
+/* BTNS */
+.btn-primary{display:inline-flex;align-items:center;gap:8px;padding:13px 26px;background:var(--teal);color:#fff;border-radius:100px;font-size:.82rem;font-weight:600;transition:all .25s;box-shadow:0 4px 14px rgba(11,140,126,.28)}
+.btn-primary:hover{background:var(--blue);transform:translateY(-2px)}
+.stag{font-size:.64rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);display:block;margin-bottom:8px}
+.sh2{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:800;color:var(--blue);letter-spacing:-.025em}
+.sh2 em{font-style:italic;color:var(--teal)}
+.rv{opacity:0;transform:translateY(22px);transition:opacity .6s,transform .6s}
+.rv.in{opacity:1;transform:none}
+@media(max-width:900px){.vid-grid{grid-template-columns:1fr}.vid-subs{flex-direction:row}.gal-grid{columns:2}.insta-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:560px){.gal-grid{columns:1}.insta-grid{grid-template-columns:repeat(3,1fr)}.lb-prev{left:-32px}.lb-next{right:-32px}}
+</style>
+</head>
+<body>
+<div id="cursor-outer"></div><div id="cursor-dot"></div>
+<div id="site-nav"></div>
+<section class="gal-hero">
+  <div class="rv">
+    <span style="font-size:.64rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.45);display:block;margin-bottom:10px;position:relative;z-index:1">📸 Photos &amp; Videos</span>
+    <h1>Moments from<br><em>Gulmarg</em></h1>
+    <p>Real photos and videos captured on the slopes and trails we guide every single day. Every image from our team on the mountain.</p>
+    <div class="gal-tabs">
+      <button class="gtab on" onclick="fg('all',this)">All</button>
+      <button class="gtab" onclick="fg('ski',this)">⛷ Skiing</button>
+      <button class="gtab" onclick="fg('snowboard',this)">🏂 Snowboard</button>
+      <button class="gtab" onclick="fg('trek',this)">🥾 Trekking</button>
+      <button class="gtab" onclick="fg('landscape',this)">🏔 Landscape</button>
+    </div>
+  </div>
+</section>
+<!-- VIDEO HIGHLIGHTS -->
+<section class="vid-sec">
+  <div style="max-width:1280px;margin:0 auto">
+    <div class="rv"><span class="stag">🎬 Featured Videos</span><h2 class="sh2">Gulmarg on <em>Film</em></h2><p style="font-size:.86rem;color:var(--muted);margin-top:8px;line-height:1.7">Click any video to watch. Replace the YouTube links in the code with your actual videos.</p></div>
+    <div class="vid-grid rv">
+      <div class="vid-main" onclick="ov('https://www.youtube.com/embed/3JZ_D3ELwOQ?autoplay=1&rel=0')">
+        <img src="../images/heliski.jpg" alt="Heliski" onerror="this.style.background='linear-gradient(135deg,#0d1f3c,#0b4a42)';this.removeAttribute('onerror')"/>
+        <div class="play-btn"><div class="play-circle">▶</div></div>
+        <div class="vid-info"><h3>Heliski Kashmir — Off-Piste Lines</h3><p>Virgin powder from 4,500m · GulmargOnTheGo</p></div>
+      </div>
+      <div class="vid-subs">
+        <div class="vid-sub" onclick="ov('https://www.youtube.com/embed/tgbNymZ7vqY?autoplay=1&rel=0')">
+          <img src="../images/skiing.jpg" alt="Skiing" onerror="this.style.background='linear-gradient(135deg,#0d2040,#0b7b6e)';this.removeAttribute('onerror')"/>
+          <div class="play-btn"><div class="play-circle">▶</div></div>
+          <div class="vid-info"><h4>Apharwat Phase 2 — First Run</h4><p>Gondola summit · 3,980m</p></div>
+        </div>
+        <div class="vid-sub" onclick="ov('https://www.youtube.com/embed/tgbNymZ7vqY?autoplay=1&rel=0')">
+          <img src="../images/backcountry.jpg" alt="Backcountry" onerror="this.style.background='linear-gradient(135deg,#1a0d30,#0b5e52)';this.removeAttribute('onerror')"/>
+          <div class="play-btn"><div class="play-circle">▶</div></div>
+          <div class="vid-info"><h4>North Bowl Backcountry</h4><p>Off-piste deep powder January</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- PHOTO GRID -->
+<section class="gal-sec">
+  <div style="max-width:1280px;margin:0 auto">
+    <div class="rv"><span class="stag">📸 Photo Gallery</span><h2 class="sh2">Our <em>Best Shots</em></h2></div>
+    <div class="gal-grid rv" id="gg">
+      <div class="gal-item ski" onclick="ol(this)" data-cap="Apharwat Phase 2 — Advanced Skiing" data-cat="ski"><img src="../images/skiing.jpg" alt="Skiing" onerror="this.style.background='linear-gradient(135deg,#0d1f3c,#0b4a42)';this.style.height='220px';this.removeAttribute('onerror')"/><div class="gil"><strong>Apharwat Phase 2</strong><small>Advanced Skiing · 3,980m</small></div></div>
+      <div class="gal-item landscape" onclick="ol(this)" data-cap="Gulmarg Valley — Winter" data-cat="landscape"><img src="../images/gulmarg.jpg" alt="Gulmarg" onerror="this.style.background='linear-gradient(135deg,#0d1f3c,#0b7b6e)';this.style.height='200px';this.removeAttribute('onerror')"/><div class="gil"><strong>Gulmarg Valley</strong><small>Winter Landscape</small></div></div>
+      <div class="gal-item snowboard" onclick="ol(this)" data-cap="Freeride Snowboarding — Zone 3" data-cat="snowboard"><img src="../images/snowboard.jpg" alt="Snowboard" onerror="this.style.background='linear-gradient(135deg,#0e1f35,#0e5c8a)';this.style.height='200px';this.removeAttribute('onerror')"/><div class="gil"><strong>Freeride Snowboarding</strong><small>Zone 3 Off-Piste</small></div></div>
+      <div class="gal-item landscape" onclick="ol(this)" data-cap="Gondola Phase 1 — Kongdori Bowl" data-cat="landscape"><img src="../images/gondola.jpg" alt="Gondola" onerror="this.style.background='linear-gradient(135deg,#1a2d4a,#0b7b6e)';this.style.height='240px';this.removeAttribute('onerror')"/><div class="gil"><strong>Gondola Phase 1</strong><small>Kongdori · 3,050m</small></div></div>
+      <div class="gal-item trek" onclick="ol(this)" data-cap="Mountain Trekking — Summer Trail" data-cat="trek"><img src="../images/trekking.jpg" alt="Trekking" onerror="this.style.background='linear-gradient(135deg,#1a3520,#2d5a38)';this.style.height='200px';this.removeAttribute('onerror')"/><div class="gil"><strong>Mountain Trekking</strong><small>Gulmarg Summer Trail</small></div></div>
+      <div class="gal-item ski" onclick="ol(this)" data-cap="Apharwat Summit — Panoramic View" data-cat="ski"><img src="../images/slopes-hero.jpg" alt="Apharwat" onerror="this.style.background='linear-gradient(135deg,#0d1f3c,#0b4a42)';this.style.height='220px';this.removeAttribute('onerror')"/><div class="gil"><strong>Apharwat Summit</strong><small>3,980m · Pir Panjal</small></div></div>
+      <div class="gal-item ski" onclick="ol(this)" data-cap="Backcountry North Bowl — Guided" data-cat="ski"><img src="../images/backcountry.jpg" alt="Backcountry" onerror="this.style.background='linear-gradient(135deg,#0a1530,#143d30)';this.style.height='200px';this.removeAttribute('onerror')"/><div class="gil"><strong>North Bowl</strong><small>Expert Backcountry · Guided</small></div></div>
+      <div class="gal-item trek" onclick="ol(this)" data-cap="Meadow Camping — Summer Night" data-cat="trek"><img src="../images/camping.jpg" alt="Camping" onerror="this.style.background='linear-gradient(135deg,#1a2d10,#3d5a28)';this.style.height='220px';this.removeAttribute('onerror')"/><div class="gil"><strong>Meadow Camping</strong><small>Wildflower Season · June</small></div></div>
+      <div class="gal-item landscape" onclick="ol(this)" data-cap="Srinagar Dal Lake — Sunset" data-cat="landscape"><img src="../images/srinagar.jpg" alt="Srinagar" onerror="this.style.background='linear-gradient(135deg,#1e3a5f,#0b7b6e)';this.style.height='200px';this.removeAttribute('onerror')"/><div class="gil"><strong>Srinagar · Dal Lake</strong><small>Evening Light</small></div></div>
+      <div class="gal-item landscape" onclick="ol(this)" data-cap="Pahalgam Valley — Green Season" data-cat="landscape"><img src="../images/pahalgam.jpg" alt="Pahalgam" onerror="this.style.background='linear-gradient(135deg,#1a3a2f,#2d6a4f)';this.style.height='220px';this.removeAttribute('onerror')"/><div class="gil"><strong>Pahalgam Valley</strong><small>Summer Green</small></div></div>
+      <div class="gal-item trek" onclick="ol(this)" data-cap="Sonamarg — Thajiwas Glacier" data-cat="trek"><img src="../images/sonamarg.jpg" alt="Sonamarg" onerror="this.style.background='linear-gradient(135deg,#1a2d4a,#0b7b6e)';this.style.height='200px';this.removeAttribute('onerror')"/><div class="gil"><strong>Sonamarg</strong><small>Thajiwas Glacier</small></div></div>
+      <div class="gal-item ski" onclick="ol(this)" data-cap="Heliski Access — Summit Drop" data-cat="ski"><img src="../images/heliski.jpg" alt="Heliski" onerror="this.style.background='linear-gradient(135deg,#1a0d30,#0b5e52)';this.style.height='240px';this.removeAttribute('onerror')"/><div class="gil"><strong>Heliski Drop</strong><small>Summit 4,500m</small></div></div>
+    </div>
+    <div style="text-align:center;margin-top:40px;padding-top:28px;border-top:1px solid var(--border)" class="rv">
+      <a href="../contact/" class="btn-primary">Book Your Adventure →</a>
+    </div>
+  </div>
+</section>
+<!-- INSTAGRAM STRIP -->
+<section class="insta-sec">
+  <div class="rv"><span class="stag">Follow Our Journey</span><h2 class="sh2" style="margin-bottom:4px">On the Slopes, Every Day</h2></div>
+  <div class="insta-grid rv">
+    <div class="ii"><img src="../images/skiing.jpg" alt="" onerror="this.style.background='linear-gradient(135deg,#0d1f3c,#0b4a42)';this.removeAttribute('onerror')"/><div class="ii-ov">⛷</div></div>
+    <div class="ii"><img src="../images/snowboard.jpg" alt="" onerror="this.style.background='linear-gradient(135deg,#0e1f35,#0e5c8a)';this.removeAttribute('onerror')"/><div class="ii-ov">🏂</div></div>
+    <div class="ii"><img src="../images/heliski.jpg" alt="" onerror="this.style.background='linear-gradient(135deg,#1a0d30,#0b5e52)';this.removeAttribute('onerror')"/><div class="ii-ov">🚁</div></div>
+    <div class="ii"><img src="../images/gulmarg.jpg" alt="" onerror="this.style.background='linear-gradient(135deg,#0d1f3c,#0b7b6e)';this.removeAttribute('onerror')"/><div class="ii-ov">🏔</div></div>
+    <div class="ii"><img src="../images/trekking.jpg" alt="" onerror="this.style.background='linear-gradient(135deg,#1a3520,#2d5a38)';this.removeAttribute('onerror')"/><div class="ii-ov">🥾</div></div>
+    <div class="ii"><img src="../images/camping.jpg" alt="" onerror="this.style.background='linear-gradient(135deg,#1a2d10,#3d5a28)';this.removeAttribute('onerror')"/><div class="ii-ov">⛺</div></div>
+  </div>
+</section>
+<!-- LIGHTBOX -->
+<div class="lb" id="lb" onclick="cl(event)">
+  <div class="lb-inner">
+    <button class="lb-x" onclick="clb()">✕</button>
+    <button class="lb-nav lb-prev" onclick="nl(-1,event)">‹</button>
+    <button class="lb-nav lb-next" onclick="nl(1,event)">›</button>
+    <img id="lbI" src="" alt=""/>
+    <div class="lb-cap" id="lbC"></div>
+  </div>
+</div>
+<!-- VIDEO MODAL -->
+<div class="vm" id="vm" onclick="cv(event)">
+  <div class="vm-in">
+    <button class="vm-x" onclick="cvm()">✕</button>
+    <iframe id="vmi" src="" allow="autoplay;fullscreen" allowfullscreen></iframe>
+  </div>
+</div>
+<div id="site-footer"></div>
+<script>
+var its=[],lbi=0;
+function fg(c,b){document.querySelectorAll('.gtab').forEach(x=>x.classList.remove('on'));b.classList.add('on');document.querySelectorAll('.gal-item').forEach(i=>{i.classList.toggle('hidden',c!=='all'&&i.dataset.cat!==c)});}
+function ol(e){its=Array.from(document.querySelectorAll('.gal-item:not(.hidden)'));lbi=its.indexOf(e);sl(lbi);document.getElementById('lb').classList.add('open');}
+function sl(i){var e=its[i];if(!e)return;var img=e.querySelector('img');if(!img)return;document.getElementById('lbI').src=img.src;document.getElementById('lbC').textContent=e.dataset.cap||'';}
+function nl(d,e){e.stopPropagation();lbi=(lbi+d+its.length)%its.length;sl(lbi);}
+function cl(e){if(e.target.id==='lb')clb();}
+function clb(){document.getElementById('lb').classList.remove('open');}
+document.addEventListener('keydown',e=>{var lb=document.getElementById('lb');if(lb.classList.contains('open')){if(e.key==='ArrowLeft')nl(-1,{stopPropagation:()=>{}});else if(e.key==='ArrowRight')nl(1,{stopPropagation:()=>{}});else if(e.key==='Escape')clb();}});
+function ov(s){document.getElementById('vmi').src=s;document.getElementById('vm').classList.add('open');}
+function cv(e){if(e.target.id==='vm')cvm();}
+function cvm(){document.getElementById('vmi').src='';document.getElementById('vm').classList.remove('open');}
+</script>
+<script src="../js/shared.js"></script>
+<script>injectNav('../');injectFooter('../');</script>
+</body>
+</html>

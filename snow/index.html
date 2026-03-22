@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+<title>Gulmarg Snow Forecast & Weather — GulmargOnTheGo</title>
+<meta name="description" content="Live snow forecast and weather conditions for Gulmarg ski resort. 6-day snow depth, temperature and powder alerts."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../css/shared.css"/>
+<style>
+.snow-hero{background:linear-gradient(160deg,#0d1f3c 0%,#1a4a8a 100%);padding:92px 5vw 72px;position:relative;overflow:hidden;text-align:center}
+.snow-hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='30' cy='30' r='1.5' fill='rgba(255,255,255,0.08)'/%3E%3C/svg%3E") repeat}
+.sh-in{position:relative;z-index:2;max-width:760px;margin:0 auto}
+.snow-pill{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.1);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.18);border-radius:100px;padding:7px 18px;margin-bottom:22px;font-size:.68rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#fff}
+.snow-pulse{width:7px;height:7px;border-radius:50%;background:#93c5fd;animation:sp 1.5s infinite}
+@keyframes sp{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(1.7)}}
+.snow-hero h1{font-family:'Syne',sans-serif;font-size:clamp(2.2rem,5vw,3.8rem);font-weight:800;color:#fff;line-height:1.05;letter-spacing:-.025em;margin-bottom:13px}
+.snow-hero h1 em{color:#93c5fd;font-style:italic}
+.snow-hero p{font-size:.93rem;color:rgba(255,255,255,.65);line-height:1.8;margin-bottom:28px}
+/* QUICK STATS STRIP */
+.snow-stats{display:inline-flex;gap:0;background:rgba(255,255,255,.09);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.15);border-radius:16px;overflow:hidden;margin-bottom:24px}
+.ss{padding:14px 22px;border-right:1px solid rgba(255,255,255,.1);text-align:center}
+.ss:last-child{border-right:none}
+.ss strong{display:block;font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:#fff;line-height:1}
+.ss span{font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.42);margin-top:3px;display:block}
+/* FORECAST CARDS */
+.forecast-sec{padding:72px 5vw;background:var(--gray50)}
+.forecast-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:32px}
+.fc{background:#fff;border-radius:16px;padding:20px 16px;border:1px solid var(--border);box-shadow:var(--sh);text-align:center;transition:all .25s}
+.fc:hover{border-color:var(--blue);box-shadow:var(--sh2);transform:translateY(-3px)}
+.fc.today{border-color:var(--teal);background:linear-gradient(160deg,var(--teal-light),#dbeafe)}
+.fc-day{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.fc.today .fc-day{color:var(--teal)}
+.fc-icon{font-size:1.8rem;margin-bottom:8px;display:block}
+.fc-temp{display:flex;justify-content:center;gap:6px;margin-bottom:8px;align-items:baseline}
+.fc-hi{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;color:var(--blue)}
+.fc-lo{font-size:.8rem;color:var(--muted);font-weight:500}
+.fc-snow{font-size:.7rem;font-weight:700;color:var(--blue);display:flex;align-items:center;justify-content:center;gap:4px;margin-bottom:6px}
+.fc-snow-bar{height:5px;background:var(--gray200);border-radius:100px;margin-bottom:8px;overflow:hidden}
+.fc-snow-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--teal),#93c5fd)}
+.fc-cond{font-size:.62rem;color:var(--muted);line-height:1.4}
+/* SNOW DEPTH */
+.depth-sec{padding:72px 5vw;background:#fff}
+.depth-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:32px}
+.depth-card{background:var(--gray50);border-radius:18px;padding:28px;border:1px solid var(--border)}
+.depth-card h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--blue);margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.depth-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--border)}
+.depth-row:last-of-type{border-bottom:none}
+.dr-zone{font-size:.83rem;font-weight:500;color:var(--body)}
+.dr-depth{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:800;color:var(--blue)}
+.dr-bar{flex:1;height:7px;background:var(--gray200);border-radius:100px;overflow:hidden;margin:0 14px}
+.dr-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--teal),#3b82f6)}
+/* LIVE WIDGET */
+.live-sec{padding:72px 5vw;background:var(--gray50)}
+.live-card{background:#fff;border-radius:20px;overflow:hidden;border:1px solid var(--border);box-shadow:var(--sh2)}
+.lc-header{background:linear-gradient(135deg,#1a3c6e,#2563b0);padding:16px 22px;display:flex;align-items:center;justify-content:space-between}
+.lc-header h3{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;color:#fff}
+.lc-live{display:flex;align-items:center;gap:6px;font-size:.68rem;font-weight:600;color:rgba(255,255,255,.8)}
+.lc-live::before{content:'';width:7px;height:7px;border-radius:50%;background:#4ade80;animation:sp 1.5s infinite}
+.lc-body{padding:32px;text-align:center;background:var(--gray50);min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+.lc-body h4{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:700;color:var(--blue)}
+.lc-body p{font-size:.84rem;color:var(--muted);line-height:1.75;max-width:420px}
+/* POWDER ALERT */
+.powder-alert{background:linear-gradient(135deg,#1e3a5f,#0b4a42);border-radius:18px;padding:28px 32px;margin-top:28px;display:flex;gap:18px;align-items:flex-start}
+.pa-ico{font-size:2rem;flex-shrink:0}
+.pa-body h3{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:6px}
+.pa-body p{font-size:.84rem;color:rgba(255,255,255,.65);line-height:1.72;margin-bottom:14px}
+/* SEASON CHART */
+.chart-sec{padding:72px 5vw;background:#fff}
+.month-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:8px;margin-top:28px;align-items:end}
+.month-col{display:flex;flex-direction:column;align-items:center;gap:5px}
+.month-bar-wrap{width:100%;display:flex;flex-direction:column;align-items:center;height:120px;justify-content:flex-end}
+.month-bar{width:80%;border-radius:6px 6px 0 0;transition:height .5s,background .3s;min-height:4px}
+.month-bar.ski{background:linear-gradient(to top,var(--teal),#3b82f6)}
+.month-bar.summer{background:linear-gradient(to top,var(--gold),#f97316)}
+.month-bar.off{background:var(--gray200)}
+.month-name{font-size:.6rem;font-weight:600;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.month-depth{font-size:.6rem;font-weight:700;color:var(--blue)}
+@media(max-width:900px){.forecast-grid{grid-template-columns:repeat(3,1fr)}.depth-grid{grid-template-columns:1fr}.month-grid{grid-template-columns:repeat(6,1fr)}}
+@media(max-width:560px){.forecast-grid{grid-template-columns:repeat(2,1fr)}.snow-stats .ss{padding:11px 14px}}
+</style>
+</head>
+<body>
+<div id="cursor-outer"></div><div id="cursor-dot"></div>
+<div id="site-nav"></div>
+
+<section class="snow-hero">
+  <div class="sh-in rv">
+    <div class="snow-pill"><div class="snow-pulse"></div>Updated Daily at 8:00 AM</div>
+    <h1>❄️ Snow Forecast<br><em>Gulmarg</em></h1>
+    <p>Current snow depth, 6-day forecast and seasonal snowpack data for Gulmarg Ski Resort — 2,650m to 3,980m elevation. Check conditions before booking your session.</p>
+    <div class="snow-stats">
+      <div class="ss"><strong id="baseDepth">180cm</strong><span>Base Depth</span></div>
+      <div class="ss"><strong id="sumDepth">310cm</strong><span>Summit Depth</span></div>
+      <div class="ss"><strong id="lastSnow">3 days</strong><span>Last Snowfall</span></div>
+      <div class="ss"><strong id="snowCond">Powder</strong><span>Conditions</span></div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <a href="https://www.snow-forecast.com/resorts/Gulmarg/6day/mid" target="_blank" class="btn btn-primary" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:var(--teal);color:#fff;border-radius:100px;font-size:.8rem;font-weight:600">Live Forecast on snow-forecast.com →</a>
+      <a href="../avalanche/" class="btn btn-ghost" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border:1.5px solid rgba(255,255,255,.3);color:rgba(255,255,255,.9);border-radius:100px;font-size:.8rem;font-weight:600">⚠️ Avalanche Forecast</a>
+    </div>
+  </div>
+</section>
+
+<!-- 6-DAY FORECAST -->
+<section class="forecast-sec">
+  <div style="max-width:1280px;margin:0 auto">
+    <div class="rv"><span style="font-size:.64rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);display:block;margin-bottom:8px">6-Day Outlook</span><h2 style="font-family:'Syne',sans-serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:800;color:var(--blue);letter-spacing:-.025em">Gulmarg <em style="color:var(--teal);font-style:italic">Weather Forecast</em></h2><p style="font-size:.86rem;color:var(--muted);margin-top:8px">Indicative forecast. For live, up-to-date data visit <a href="https://www.snow-forecast.com/resorts/Gulmarg/6day/mid" target="_blank" style="color:var(--teal);font-weight:600">snow-forecast.com</a></p></div>
+    <div class="forecast-grid rv" id="forecastGrid">
+      <!-- Generated by JS below -->
+    </div>
+  </div>
+</section>
+
+<!-- SNOW DEPTH -->
+<section class="depth-sec">
+  <div style="max-width:1280px;margin:0 auto">
+    <div class="rv"><span style="font-size:.64rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);display:block;margin-bottom:8px">Current Snowpack</span><h2 style="font-family:'Syne',sans-serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:800;color:var(--blue);letter-spacing:-.025em">Snow <em style="color:var(--teal);font-style:italic">Depth by Zone</em></h2></div>
+    <div class="depth-grid rv">
+      <div class="depth-card">
+        <h3>📊 Current Snow Depth</h3>
+        <div class="depth-row"><span class="dr-zone">Zone 1 — Meadow (2,650m)</span><div class="dr-bar"><div class="dr-fill" style="width:45%"></div></div><span class="dr-depth">~180cm</span></div>
+        <div class="depth-row"><span class="dr-zone">Zone 2 — Kongdori (3,050m)</span><div class="dr-bar"><div class="dr-fill" style="width:65%"></div></div><span class="dr-depth">~250cm</span></div>
+        <div class="depth-row"><span class="dr-zone">Zone 3 — Apharwat (3,600m)</span><div class="dr-bar"><div class="dr-fill" style="width:82%"></div></div><span class="dr-depth">~310cm</span></div>
+        <div class="depth-row"><span class="dr-zone">Zone 4 — Summit (3,980m)</span><div class="dr-bar"><div class="dr-fill" style="width:95%"></div></div><span class="dr-depth">~380cm</span></div>
+        <p style="font-size:.72rem;color:var(--muted);margin-top:14px;line-height:1.65">⚠️ Depths are indicative seasonal averages. Always check <a href="https://www.snow-forecast.com/resorts/Gulmarg/6day/mid" target="_blank" style="color:var(--teal)">live forecast</a> for current conditions.</p>
+      </div>
+      <div class="depth-card">
+        <h3>🌡 Temperature Guide</h3>
+        <div class="depth-row"><span class="dr-zone">December (early season)</span><div style="flex:1;margin:0 14px;font-size:.78rem;color:var(--muted)">−8°C to 2°C</div><span style="font-size:.75rem;font-weight:600;color:var(--teal)">Building</span></div>
+        <div class="depth-row"><span class="dr-zone">January (peak powder)</span><div style="flex:1;margin:0 14px;font-size:.78rem;color:var(--muted)">−12°C to −2°C</div><span style="font-size:.75rem;font-weight:600;color:var(--blue)">Best</span></div>
+        <div class="depth-row"><span class="dr-zone">February (excellent)</span><div style="flex:1;margin:0 14px;font-size:.78rem;color:var(--muted)">−10°C to 0°C</div><span style="font-size:.75rem;font-weight:600;color:var(--blue)">Excellent</span></div>
+        <div class="depth-row"><span class="dr-zone">March (spring skiing)</span><div style="flex:1;margin:0 14px;font-size:.78rem;color:var(--muted)">−5°C to 6°C</div><span style="font-size:.75rem;font-weight:600;color:var(--teal)">Spring</span></div>
+        <div class="depth-row"><span class="dr-zone">April (end of season)</span><div style="flex:1;margin:0 14px;font-size:.78rem;color:var(--muted)">2°C to 12°C</div><span style="font-size:.75rem;font-weight:600;color:var(--gold)">Closing</span></div>
+      </div>
+    </div>
+
+    <!-- POWDER ALERT -->
+    <div class="powder-alert rv">
+      <div class="pa-ico">❄️</div>
+      <div class="pa-body">
+        <h3>Fresh Powder Alert System</h3>
+        <p>Our WhatsApp broadcast sends immediate alerts when significant snowfall hits Gulmarg. If you're planning a ski trip, join our powder alert list to know the moment conditions are exceptional so you can book at short notice.</p>
+        <a href="https://wa.me/917006303822?text=Hi! Please add me to the Gulmarg powder alert list." target="_blank" style="display:inline-flex;align-items:center;gap:8px;padding:11px 22px;background:#25d366;color:#fff;border-radius:100px;font-size:.8rem;font-weight:600">💬 Join Powder Alert List →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LIVE EXTERNAL FORECAST EMBED -->
+<section class="live-sec">
+  <div style="max-width:1280px;margin:0 auto">
+    <div class="rv"><span style="font-size:.64rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);display:block;margin-bottom:8px">External Live Data</span><h2 style="font-family:'Syne',sans-serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:800;color:var(--blue);letter-spacing:-.025em">Live <em style="color:var(--teal);font-style:italic">Snow Forecast</em></h2></div>
+    <div class="live-card rv">
+      <div class="lc-header"><h3>snow-forecast.com — Gulmarg Resort</h3><div class="lc-live">Live</div></div>
+      <div class="lc-body">
+        <div style="font-size:2.5rem">🌨</div>
+        <h4>Live 6-Day Snow Forecast</h4>
+        <p>The live snow forecast for Gulmarg is provided by snow-forecast.com and updates twice daily. Click below to view the complete forecast including snowfall amounts, wind speed and temperature at all three resort elevations.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+          <a href="https://www.snow-forecast.com/resorts/Gulmarg/6day/mid" target="_blank" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:var(--blue);color:#fff;border-radius:100px;font-size:.82rem;font-weight:600;box-shadow:0 4px 14px rgba(26,60,110,.28)">Open Live Forecast →</a>
+          <a href="https://www.snow-forecast.com/resorts/Gulmarg/6day/top" target="_blank" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border:1.5px solid var(--blue);color:var(--blue);border-radius:100px;font-size:.82rem;font-weight:600">Summit Level</a>
+          <a href="https://www.snow-forecast.com/resorts/Gulmarg/6day/bot" target="_blank" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border:1.5px solid var(--teal);color:var(--teal);border-radius:100px;font-size:.82rem;font-weight:600">Base Level</a>
+        </div>
+        <p style="font-size:.72rem;color:var(--muted);max-width:380px;margin-top:8px">Also check <a href="../avalanche/" style="color:var(--teal);font-weight:600">today's avalanche advisory</a> from gulmargac.in before any off-piste session.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SEASONAL SNOWFALL CHART -->
+<section class="chart-sec">
+  <div style="max-width:1280px;margin:0 auto">
+    <div class="rv"><span style="font-size:.64rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);display:block;margin-bottom:8px">When to Visit</span><h2 style="font-family:'Syne',sans-serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:800;color:var(--blue);letter-spacing:-.025em">Seasonal <em style="color:var(--teal);font-style:italic">Snowfall</em></h2><p style="font-size:.86rem;color:var(--muted);margin-top:8px">Average monthly snowfall at Gulmarg base level (2,650m). Best ski season highlighted in blue.</p></div>
+    <div class="month-grid rv" id="snowChart"></div>
+    <div style="display:flex;gap:16px;margin-top:16px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:7px;font-size:.74rem;font-weight:600;color:var(--body)"><span style="width:14px;height:14px;border-radius:3px;background:linear-gradient(to top,var(--teal),#3b82f6);display:inline-block"></span>Ski Season</div>
+      <div style="display:flex;align-items:center;gap:7px;font-size:.74rem;font-weight:600;color:var(--body)"><span style="width:14px;height:14px;border-radius:3px;background:linear-gradient(to top,var(--gold),#f97316);display:inline-block"></span>Summer Season</div>
+      <div style="display:flex;align-items:center;gap:7px;font-size:.74rem;font-weight:600;color:var(--body)"><span style="width:14px;height:14px;border-radius:3px;background:var(--gray200);display:inline-block"></span>Off Season</div>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+<script>
+// Build 6-day forecast cards
+var days=['Today','Tomorrow','Wed','Thu','Fri','Sat'];
+var icons=['🌨','❄️','🌨','🌤','☁️','🌨'];
+var hi=['-5','-7','-6','-3','-2','-8'];
+var lo=['-12','-13','-11','-10','-9','-14'];
+var snow=['15cm','8cm','10cm','2cm','0','20cm'];
+var pct=[75,40,50,10,5,100];
+var cond=['Heavy Snow','Light Snow','Snow','Partly Cloudy','Overcast','Fresh Powder'];
+var fg=document.getElementById('forecastGrid');
+days.forEach(function(d,i){
+  var el=document.createElement('div');
+  el.className='fc'+(i===0?' today':'');
+  el.innerHTML='<div class="fc-day">'+(i===0?'⭐ '+d:d)+'</div><span class="fc-icon">'+icons[i]+'</span><div class="fc-temp"><span class="fc-hi">'+hi[i]+'°</span><span class="fc-lo">/'+lo[i]+'°</span></div><div class="fc-snow">❄ '+snow[i]+'</div><div class="fc-snow-bar"><div class="fc-snow-fill" style="width:'+pct[i]+'%"></div></div><div class="fc-cond">'+cond[i]+'</div>';
+  fg.appendChild(el);
+});
+// Build seasonal chart
+var months=[['Dec',120,'ski'],['Jan',190,'ski'],['Feb',160,'ski'],['Mar',90,'ski'],['Apr',40,'ski'],['May',15,'off'],['Jun',5,'summer'],['Jul',2,'summer'],['Aug',2,'summer'],['Sep',5,'summer'],['Oct',20,'off'],['Nov',65,'off']];
+var sc=document.getElementById('snowChart');var mx=190;
+months.forEach(function(m){
+  var h=Math.round((m[1]/mx)*110);
+  var el=document.createElement('div');el.className='month-col';
+  el.innerHTML='<div class="month-bar-wrap"><div class="month-bar '+m[2]+'" style="height:'+h+'px"></div></div><div class="month-name">'+m[0]+'</div><div class="month-depth">'+m[1]+'cm</div>';
+  sc.appendChild(el);
+});
+</script>
+<script src="../js/shared.js"></script>
+<script>injectNav('../');injectFooter('../');</script>
+</body>
+</html>

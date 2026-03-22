@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+<title>Gulmarg Accommodation Map — Hotels & Stays · GulmargOnTheGo</title>
+<meta name="description" content="Interactive map of hotels and accommodation in Gulmarg — ski-in/ski-out, golf course hotels and village stays. Book through GulmargOnTheGo for best rates."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../css/shared.css"/>
+<style>
+.acc-hero{background:linear-gradient(160deg,#0d1f3c,#0b4a42);padding:96px 5vw 72px;text-align:center;position:relative;overflow:hidden}
+.acc-hero::before{content:'';position:absolute;top:-160px;right:-160px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(11,140,126,.14),transparent 70%)}
+.acc-hero h1{font-family:'Syne',sans-serif;font-size:clamp(2.2rem,5vw,3.8rem);font-weight:800;color:#fff;line-height:1.04;letter-spacing:-.025em;margin-bottom:13px;position:relative;z-index:1}
+.acc-hero h1 em{color:#fbbf24;font-style:italic}
+.acc-hero p{font-size:.93rem;color:rgba(255,255,255,.65);line-height:1.8;max-width:540px;margin:0 auto 28px;position:relative;z-index:1}
+/* MAP SECTION */
+.map-sec{padding:72px 5vw;background:var(--gray50)}
+.map-layout{display:grid;grid-template-columns:1fr 360px;gap:24px;margin-top:32px;align-items:start}
+.map-embed{border-radius:20px;overflow:hidden;border:1px solid var(--border);box-shadow:var(--sh2);background:var(--gray100)}
+.map-embed iframe{width:100%;height:560px;border:none;display:block}
+/* HOTEL LIST SIDEBAR */
+.hotel-list{display:flex;flex-direction:column;gap:12px}
+.hcard{background:#fff;border-radius:14px;padding:18px;border:1px solid var(--border);box-shadow:var(--sh);cursor:none;transition:all .25s}
+.hcard:hover{border-color:var(--teal);box-shadow:var(--sh2);transform:translateX(-4px)}
+.hcard.active{border-color:var(--teal);background:var(--teal-light)}
+.hc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:7px}
+.hc-name{font-family:'Syne',sans-serif;font-size:.92rem;font-weight:700;color:var(--blue)}
+.hc-stars{font-size:.7rem;color:var(--gold)}
+.hc-type{font-size:.64rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);display:block;margin-bottom:5px}
+.hc-desc{font-size:.76rem;color:var(--muted);line-height:1.6;margin-bottom:9px}
+.hc-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+.htag{font-size:.58rem;background:var(--gray100);color:var(--gray700);font-weight:600;padding:2px 8px;border-radius:100px}
+.hcard.active .htag{background:rgba(11,140,126,.12);color:var(--teal)}
+.hc-foot{display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px solid var(--border)}
+.hc-dist{font-size:.66rem;color:var(--muted)}
+.hc-book{font-size:.68rem;font-weight:700;color:var(--teal)}
+/* AREA FILTER */
+.area-tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:20px}
+.atab{padding:7px 16px;border-radius:100px;font-size:.73rem;font-weight:600;border:1.5px solid var(--border);color:var(--muted);cursor:none;transition:all .2s;background:#fff}
+.atab.on{background:var(--teal);border-color:var(--teal);color:#fff}
+/* HOTEL GRID */
+.hotels-sec{padding:72px 5vw;background:#fff}
+.hotels-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:32px}
+.hotel-card{background:#fff;border-radius:20px;overflow:hidden;border:1px solid var(--border);box-shadow:var(--sh);transition:transform .3s,box-shadow .3s}
+.hotel-card:hover{transform:translateY(-6px);box-shadow:var(--sh3);border-color:transparent}
+.hotel-card.hidden{display:none!important}
+.hci{height:200px;overflow:hidden;background:linear-gradient(135deg,var(--blue),var(--teal));position:relative}
+.hci img{width:100%;height:100%;object-fit:cover;filter:brightness(.82);transition:transform .4s}
+.hotel-card:hover .hci img{transform:scale(1.06)}
+.hci-cat{position:absolute;top:12px;left:12px;background:rgba(13,31,60,.82);color:#fff;padding:4px 11px;border-radius:100px;font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.hci-stars{position:absolute;top:12px;right:12px;background:rgba(245,158,11,.9);color:#fff;padding:4px 10px;border-radius:100px;font-size:.62rem;font-weight:700}
+.hcb{padding:20px}
+.hcb h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--blue);margin-bottom:4px}
+.hcb .hct{font-size:.64rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);display:block;margin-bottom:8px}
+.hcb p{font-size:.79rem;color:var(--muted);line-height:1.68;margin-bottom:12px}
+.hcb-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px}
+.hcb-foot{display:flex;align-items:center;justify-content:space-between;padding-top:11px;border-top:1px solid var(--border)}
+.hcb-dist{font-size:.7rem;color:var(--muted)}
+/* BTN */
+.btn-primary{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;background:var(--teal);color:#fff;border-radius:100px;font-size:.74rem;font-weight:600;transition:all .25s}
+.btn-primary:hover{background:var(--blue)}
+.rv{opacity:0;transform:translateY(22px);transition:opacity .6s,transform .6s}
+.rv.in{opacity:1;transform:none}
+.stag{font-size:.64rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);display:block;margin-bottom:8px}
+.sh2{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:800;color:var(--blue);letter-spacing:-.025em}
+.sh2 em{font-style:italic;color:var(--teal)}
+@media(max-width:960px){.map-layout{grid-template-columns:1fr}.hotels-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.hotels-grid{grid-template-columns:1fr}.map-embed iframe{height:400px}}
+</style>
+</head>
+<body>
+<div id="cursor-outer"></div><div id="cursor-dot"></div>
+<div id="site-nav"></div>
+
+<section class="acc-hero">
+  <div class="rv">
+    <span style="font-size:.64rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.45);display:block;margin-bottom:10px;position:relative;z-index:1">🏨 Where to Stay</span>
+    <h1>Gulmarg <em>Accommodation</em><br>Map</h1>
+    <p>From ski-in/ski-out hotels to cozy village guesthouses — all accommodations in Gulmarg mapped and categorised. We arrange stays at negotiated rates for all GulmargOnTheGo guests.</p>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1">
+      <a href="../contact/" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:var(--gold);color:#fff;border-radius:100px;font-size:.8rem;font-weight:600">Book Your Stay →</a>
+      <a href="https://wa.me/917006303822?text=Hi! I need help booking accommodation in Gulmarg." target="_blank" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border:1.5px solid rgba(255,255,255,.3);color:rgba(255,255,255,.9);border-radius:100px;font-size:.8rem;font-weight:600">💬 Ask for Recommendations</a>
+    </div>
+  </div>
+</section>
+
+<!-- MAP + SIDEBAR -->
+<section class="map-sec">
+  <div style="max-width:1380px;margin:0 auto">
+    <div class="rv"><span class="stag">Interactive Map</span><h2 class="sh2">Hotels &amp; Stays in <em>Gulmarg</em></h2><p style="font-size:.86rem;color:var(--muted);margin-top:8px">Pan and zoom the map to explore accommodation locations relative to the gondola, ski slopes and village centre.</p></div>
+    <div class="map-layout rv">
+      <div class="map-embed">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6594.8!2d74.3833!3d34.0538!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38e18a1563a3511b%3A0x5a19f09e67fc5ed6!2sGulmarg%2C%20Jammu%20%26%20Kashmir!5e0!3m2!1sen!2sin!4v1234567890!5m2!1sen!2sin" allowfullscreen loading="lazy" title="Gulmarg Accommodation Map"></iframe>
+      </div>
+      <div>
+        <div class="area-tabs">
+          <button class="atab on" onclick="fa('all',this)">All</button>
+          <button class="atab" onclick="fa('ski-in',this)">⛷ Ski-In/Out</button>
+          <button class="atab" onclick="fa('golf',this)">⛳ Golf Course</button>
+          <button class="atab" onclick="fa('village',this)">🏠 Village</button>
+        </div>
+        <div class="hotel-list" id="hotelList">
+          <div class="hcard ski-in" onclick="hl(this)">
+            <div class="hc-top"><div><span class="hc-type">⛷ Ski-In / Ski-Out</span><div class="hc-name">Hotel Khyber Himalayan Resort</div></div><div class="hc-stars">★★★★★</div></div>
+            <p class="hc-desc">Gulmarg's most prestigious 5-star property — directly on the slopes with gondola access, spa, heated pool and exceptional views of Apharwat.</p>
+            <div class="hc-tags"><span class="htag">5-Star</span><span class="htag">Ski-In</span><span class="htag">Spa</span><span class="htag">Restaurant</span></div>
+            <div class="hc-foot"><span class="hc-dist">📍 On slope · Premium</span><a href="../contact/" class="hc-book">Book via us →</a></div>
+          </div>
+          <div class="hcard golf" onclick="hl(this)">
+            <div class="hc-top"><div><span class="hc-type">⛳ Golf Course Area</span><div class="hc-name">The Highlands Park Hotel</div></div><div class="hc-stars">★★★★</div></div>
+            <p class="hc-desc">Set along the golf course with panoramic mountain views. Comfortable, well-run 4-star hotel popular with ski groups and families.</p>
+            <div class="hc-tags"><span class="htag">4-Star</span><span class="htag">Golf Course</span><span class="htag">Family</span></div>
+            <div class="hc-foot"><span class="hc-dist">📍 Golf course area</span><a href="../contact/" class="hc-book">Book via us →</a></div>
+          </div>
+          <div class="hcard golf" onclick="hl(this)">
+            <div class="hc-top"><div><span class="hc-type">⛳ Golf Course Area</span><div class="hc-name">Hotel Hiltop Gulmarg</div></div><div class="hc-stars">★★★★</div></div>
+            <p class="hc-desc">Reliable 4-star with good access to both the gondola and village. Known for excellent Kashmiri cuisine and attentive service.</p>
+            <div class="hc-tags"><span class="htag">4-Star</span><span class="htag">Restaurant</span><span class="htag">Central</span></div>
+            <div class="hc-foot"><span class="hc-dist">📍 Central Gulmarg</span><a href="../contact/" class="hc-book">Book via us →</a></div>
+          </div>
+          <div class="hcard village" onclick="hl(this)">
+            <div class="hc-top"><div><span class="hc-type">🏠 Village</span><div class="hc-name">Hotel Khaleel Palace</div></div><div class="hc-stars">★★★</div></div>
+            <p class="hc-desc">Excellent budget-friendly 3-star in the village. Clean, warm and centrally located — great for guests who want to spend their budget on skiing, not accommodation.</p>
+            <div class="hc-tags"><span class="htag">3-Star</span><span class="htag">Budget-Friendly</span><span class="htag">Village</span></div>
+            <div class="hc-foot"><span class="hc-dist">📍 Village centre</span><a href="../contact/" class="hc-book">Book via us →</a></div>
+          </div>
+          <div class="hcard village" onclick="hl(this)">
+            <div class="hc-top"><div><span class="hc-type">🏠 Village</span><div class="hc-name">Hotel Shaw Inn</div></div><div class="hc-stars">★★★★</div></div>
+            <p class="hc-desc">Mid-range hotel with a loyal repeat guest base. Comfortable rooms, good heating and reliable WiFi — everything you need after a full day on the mountain.</p>
+            <div class="hc-tags"><span class="htag">4-Star</span><span class="htag">Good Value</span><span class="htag">Heating</span></div>
+            <div class="hc-foot"><span class="hc-dist">📍 Village area</span><a href="../contact/" class="hc-book">Book via us →</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ALL HOTELS GRID -->
+<section class="hotels-sec">
+  <div style="max-width:1280px;margin:0 auto">
+    <div class="rv"><span class="stag">All Properties</span><h2 class="sh2">Where to <em>Stay</em></h2><p style="font-size:.86rem;color:var(--muted);margin-top:8px">We arrange accommodation at all major properties in Gulmarg. Tell us your group size and budget and we'll recommend the best option.</p></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin:24px 0 32px">
+      <button style="padding:8px 18px;border-radius:100px;font-size:.74rem;font-weight:600;border:1.5px solid var(--border);color:var(--muted);cursor:none;background:#fff;transition:all .2s" class="htab on" onclick="fh('all',this)">All Hotels</button>
+      <button style="padding:8px 18px;border-radius:100px;font-size:.74rem;font-weight:600;border:1.5px solid var(--border);color:var(--muted);cursor:none;background:#fff;transition:all .2s" class="htab" onclick="fh('luxury',this)">⭐ Luxury</button>
+      <button style="padding:8px 18px;border-radius:100px;font-size:.74rem;font-weight:600;border:1.5px solid var(--border);color:var(--muted);cursor:none;background:#fff;transition:all .2s" class="htab" onclick="fh('comfort',this)">🏨 Comfort</button>
+      <button style="padding:8px 18px;border-radius:100px;font-size:.74rem;font-weight:600;border:1.5px solid var(--border);color:var(--muted);cursor:none;background:#fff;transition:all .2s" class="htab" onclick="fh('budget',this)">💰 Budget</button>
+    </div>
+    <div class="hotels-grid" id="hotelsGrid">
+      <div class="hotel-card rv luxury"><div class="hci" style="background:linear-gradient(135deg,#0d1f3c,#0b4a42)"><img src="../images/hero2.jpg" alt="Khyber" onerror="this.style.display='none'"/><div class="hci-cat">⛷ Ski-In/Out</div><div class="hci-stars">★★★★★</div></div><div class="hcb"><h3>Hotel Khyber Himalayan Resort</h3><span class="hct">5-Star · Luxury · Ski-In/Ski-Out</span><p>Gulmarg's flagship luxury resort, directly on the piste with gondola access, full-service spa, heated outdoor pool and fine dining. The most prestigious address in the valley.</p><div class="hcb-tags"><span class="htag">Spa</span><span class="htag">Pool</span><span class="htag">Ski-In</span><span class="htag">5-Star</span></div><div class="hcb-foot"><span class="hcb-dist">📍 On the slopes</span><a href="../contact/" class="btn-primary">Book via us</a></div></div></div>
+      <div class="hotel-card rv comfort"><div class="hci" style="background:linear-gradient(135deg,#0d2040,#0b5a52)"><img src="../images/hero2.jpg" alt="Highlands" onerror="this.style.display='none'"/><div class="hci-cat">⛳ Golf Course</div><div class="hci-stars">★★★★</div></div><div class="hcb"><h3>Highlands Park Hotel</h3><span class="hct">4-Star · Comfort · Golf Course Area</span><p>Set on the golf course with mountain panoramas. Well-run hotel with consistent service — popular with ski groups, families and returning guests who know Gulmarg well.</p><div class="hcb-tags"><span class="htag">Golf Course</span><span class="htag">Family</span><span class="htag">Restaurant</span></div><div class="hcb-foot"><span class="hcb-dist">📍 Golf course</span><a href="../contact/" class="btn-primary">Book via us</a></div></div></div>
+      <div class="hotel-card rv comfort"><div class="hci" style="background:linear-gradient(135deg,#1a0d30,#0b5e52)"><img src="../images/hero2.jpg" alt="Hiltop" onerror="this.style.display='none'"/><div class="hci-cat">🏔 Central</div><div class="hci-stars">★★★★</div></div><div class="hcb"><h3>Hotel Hiltop Gulmarg</h3><span class="hct">4-Star · Comfort · Central Location</span><p>Reliable 4-star with good access to the gondola and village. Known for authentic Kashmiri cuisine served in a warm dining room after a long day on the mountain.</p><div class="hcb-tags"><span class="htag">Central</span><span class="htag">Restaurant</span><span class="htag">Good Value</span></div><div class="hcb-foot"><span class="hcb-dist">📍 Central Gulmarg</span><a href="../contact/" class="btn-primary">Book via us</a></div></div></div>
+      <div class="hotel-card rv budget"><div class="hci" style="background:linear-gradient(135deg,#142840,#0b4032)"><img src="../images/hero2.jpg" alt="Khaleel" onerror="this.style.display='none'"/><div class="hci-cat">🏠 Village</div><div class="hci-stars">★★★</div></div><div class="hcb"><h3>Hotel Khaleel Palace</h3><span class="hct">3-Star · Budget-Friendly · Village</span><p>Outstanding value for money. Clean, warm rooms in the village centre. The right choice for guests who want to maximise their days on the mountain.</p><div class="hcb-tags"><span class="htag">Budget</span><span class="htag">Village</span><span class="htag">Clean</span></div><div class="hcb-foot"><span class="hcb-dist">📍 Village centre</span><a href="../contact/" class="btn-primary">Book via us</a></div></div></div>
+      <div class="hotel-card rv comfort"><div class="hci" style="background:linear-gradient(135deg,#0d2030,#143020)"><img src="../images/hero2.jpg" alt="Shaw Inn" onerror="this.style.display='none'"/><div class="hci-cat">🏠 Village</div><div class="hci-stars">★★★★</div></div><div class="hcb"><h3>Hotel Shaw Inn</h3><span class="hct">4-Star · Comfort · Village Area</span><p>Mid-range hotel with a strong reputation for warm hospitality. Good WiFi, reliable heating and an attentive team that understands what ski guests need.</p><div class="hcb-tags"><span class="htag">WiFi</span><span class="htag">Heated</span><span class="htag">Good Service</span></div><div class="hcb-foot"><span class="hcb-dist">📍 Village area</span><a href="../contact/" class="btn-primary">Book via us</a></div></div></div>
+      <div class="hotel-card rv budget"><div class="hci" style="background:linear-gradient(135deg,#1a3520,#1a3540)"><img src="../images/hero2.jpg" alt="Mama Palace" onerror="this.style.display='none'"/><div class="hci-cat">🏠 Village</div><div class="hci-stars">★★★</div></div><div class="hcb"><h3>Hotel Mama Palace</h3><span class="hct">3-Star · Budget · Village</span><p>Simple, honest accommodation with everything you need for a ski trip. Friendly staff, good local food and a central village location at an accessible price point.</p><div class="hcb-tags"><span class="htag">Budget</span><span class="htag">Local Food</span><span class="htag">Friendly</span></div><div class="hcb-foot"><span class="hcb-dist">📍 Village</span><a href="../contact/" class="btn-primary">Book via us</a></div></div></div>
+    </div>
+    <div style="background:var(--teal-light);border-radius:16px;padding:24px 28px;margin-top:40px;border:1px solid rgba(11,140,126,.15)" class="rv">
+      <p style="font-size:.88rem;color:var(--blue);font-weight:600;margin-bottom:6px">🤝 Let us arrange your accommodation</p>
+      <p style="font-size:.82rem;color:var(--muted);line-height:1.76;margin-bottom:14px">We have negotiated rates with all major properties in Gulmarg. Tell us your dates, group size and budget and we'll recommend and book the best option — often at better rates than booking directly.</p>
+      <a href="../contact/" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:var(--teal);color:#fff;border-radius:100px;font-size:.82rem;font-weight:600">Request Accommodation Booking →</a>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+<script>
+function fa(cat,btn){document.querySelectorAll('.atab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');document.querySelectorAll('.hcard').forEach(c=>{c.classList.toggle('hidden',cat!=='all'&&!c.classList.contains(cat));});}
+function hl(el){document.querySelectorAll('.hcard').forEach(c=>c.classList.remove('active'));el.classList.add('active');}
+function fh(cat,btn){document.querySelectorAll('.htab').forEach(b=>{b.classList.remove('on');b.style.background='#fff';b.style.borderColor='var(--border)';b.style.color='var(--muted)'});btn.classList.add('on');btn.style.background='var(--teal)';btn.style.borderColor='var(--teal)';btn.style.color='#fff';document.querySelectorAll('.hotel-card').forEach(c=>{c.classList.toggle('hidden',cat!=='all'&&!c.classList.contains(cat));});}
+</script>
+<script src="../js/shared.js"></script>
+<script>injectNav('../');injectFooter('../');</script>
+</body>
+</html>
